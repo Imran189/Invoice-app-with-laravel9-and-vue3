@@ -6,10 +6,14 @@ const customer_id = ref([]);
 
 const item = ref([]);
 const listCart = ref([]);
+const showModal = ref(false);
+const hideModal = ref(true);
+let listProduct = ref([]);
 
 onMounted(async () => {
     indexForm();
     getAllCustomer();
+    getProduct();
 });
 
 const indexForm = async () => {
@@ -30,6 +34,19 @@ const addCart = async (item) => {
         quantity: item.quantity,
     };
     listCart.value.push(itemcart);
+};
+
+const openModal = () => {
+    showModal.value = !showModal.value;
+};
+
+const closeModal = () => {
+    showModal.value = !hideModal;
+};
+
+const getProduct = async () => {
+    let response = await axios.get("/api/get_all_product");
+    console.log("rep", response.data);
 };
 </script>
 <template>
@@ -138,7 +155,10 @@ const addCart = async (item) => {
                         </p>
                     </div>
                     <div style="padding: 10px 30px !important">
-                        <button class="btn btn-sm btn__open--modal" @click="openModal()">
+                        <button
+                            class="btn btn-sm btn__open--modal"
+                            @click="openModal()"
+                        >
                             Add New Line
                         </button>
                     </div>
@@ -173,6 +193,39 @@ const addCart = async (item) => {
                 <div></div>
                 <div>
                     <a class="btn btn-secondary"> Save </a>
+                </div>
+            </div>
+        </div>
+
+        <!--==================== add modal items ====================-->
+        <div class="modal main__modal" :class="{ show: showModal }">
+            <div class="modal__content">
+                <span
+                    class="modal__close btn__close--modal"
+                    @click="closeModal()"
+                    >×</span
+                >
+                <h3 class="modal__title">Add Item</h3>
+                <hr />
+                <br />
+                <div class="modal__items">
+                    <select class="input my-1">
+                        <option value="None">None</option>
+                        <option value="None">LBC Padala</option>
+                    </select>
+                </div>
+                <br />
+                <hr />
+                <div class="model__footer">
+                    <button
+                        class="btn btn-light mr-2 btn__close--modal"
+                        @click="closeModal()"
+                    >
+                        Cancel
+                    </button>
+                    <button class="btn btn-light btn__close--modal">
+                        Save
+                    </button>
                 </div>
             </div>
         </div>
