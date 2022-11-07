@@ -35,9 +35,30 @@ class InvoiceController extends Controller
         $invoice = Invoice::orderBy('id','DESC')->first();
         if($invoice){
             $invoice = $invoice->id+1;
-            $counter = $counter->value;
+            $counters = $counter->value;
         }else{
-            $counter = $counter->value;
+            $counters = $counter->value;
         }
+
+        $formData=[
+            'number'=>$counter->prefix.$counters,
+            'customer_id'=>null,
+            'customer'=>null,
+            'date'=>date('Y-m-d'),
+            'due_date'=>null,
+            'reference'=>null,
+            'discount'=>0,
+            'terms and condition'=>'Default terms and conditions',
+            'item'=>[
+                [
+                   'product_id'=>null,
+                   'product'=>null,
+                   'unit_price'=>0,
+                   'quantity'=>1 
+                ]
+            ]
+                ];
+
+                return response()->json($formData);
     }
 }

@@ -1,6 +1,9 @@
 <script setup>
 import axios from "axios";
 import { onMounted, ref } from "vue";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
 
 let invoices = ref([]);
 let searchInvoice = ref([]);
@@ -24,6 +27,8 @@ const search = async () => {
 
 const newInvoice = async () => {
     let form = await axios.get("/api/create_invoice");
+    console.log(form);
+    router.push("/invoice/new");
 };
 </script>
 <template>
