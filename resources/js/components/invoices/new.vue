@@ -88,7 +88,7 @@ const Total = () => {
                             v-model="customer_id"
                         >
                             <option disabled selected>
-                                Selected Customer na
+                                Selected Customer name
                             </option>
                             <option
                                 v-for="customer in allcustomer"
