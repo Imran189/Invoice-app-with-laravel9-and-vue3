@@ -1,4 +1,5 @@
 <script setup>
+import { stringify } from "querystring";
 import { onMounted, ref } from "vue";
 const form = ref([]);
 const allcustomer = ref([]);
@@ -65,6 +66,27 @@ const subTotal = () => {
 
 const Total = () => {
     return subTotal() - form.value.discount;
+};
+const onSave = async () => {
+    if (listCart.value.length >= 1) {
+        let subtotal = 0;
+        subtotal = subTotal();
+
+        let total = 0;
+        total = Total();
+
+        const formData = new FormData();
+        formData.append("invoice_item", stringify(listCart.value));
+        formData.append("customer_id", customer_id.value);
+        formData.append("date", form.value.date);
+        formData.append("due_date", form.value.due_date);
+        formData.append("number", form.value.number);
+        formData.append("reference", form.value.reference);
+        formData.append("discount", form.value.discount);
+        formData.append("subtotal", form.value.subtotal);
+        formData.append("total", form.value.total);
+        formData.append("terms_and_condition", form.value.terms_and_condition);
+    }
 };
 </script>
 <template>
@@ -218,7 +240,7 @@ const Total = () => {
             <div class="card__header" style="margin-top: 40px">
                 <div></div>
                 <div>
-                    <a class="btn btn-secondary"> Save </a>
+                    <a class="btn btn-secondary" @click="onSave()"> Save </a>
                 </div>
             </div>
         </div>
