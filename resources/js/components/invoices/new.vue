@@ -1,5 +1,4 @@
 <script setup>
-import { stringify } from "querystring";
 import { onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 
@@ -70,7 +69,7 @@ const subTotal = () => {
 const Total = () => {
     return subTotal() - form.value.discount;
 };
-const onSave = async () => {
+const onSave = () => {
     if (listCart.value.length >= 1) {
         let subtotal = 0;
         subtotal = subTotal();
@@ -79,15 +78,15 @@ const onSave = async () => {
         total = Total();
 
         const formData = new FormData();
-        formData.append("invoice_item", stringify(listCart.value));
+        formData.append("invoice_item", JSON.stringify(listCart.value));
         formData.append("customer_id", customer_id.value);
         formData.append("date", form.value.date);
         formData.append("due_date", form.value.due_date);
         formData.append("number", form.value.number);
         formData.append("reference", form.value.reference);
         formData.append("discount", form.value.discount);
-        formData.append("subtotal", form.value.subtotal);
-        formData.append("total", form.value.total);
+        formData.append("subtotal", subtotal);
+        formData.append("total", total);
         formData.append("terms_and_condition", form.value.terms_and_condition);
 
         axios.post("/api/add_invoice", formData);

@@ -14,4 +14,6 @@ class ProductController extends Controller
             'products'=>$data
         ],200);
     }
+
+    
 }
