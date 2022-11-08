@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 class InvoiceController extends Controller
 {
     public function get_invoice_list(){
-        $data= Invoice::with('customer')->orderBy('id','DESC')->get();
+        $data = Invoice::with('customer')->orderBy('id','DESC')->get();
 
         return response()->json([
             'invoices'=>$data
@@ -48,7 +48,7 @@ class InvoiceController extends Controller
             'due_date'=>null,
             'reference'=>null,
             'discount'=>0,
-            'terms and condition'=>'Default terms and conditions',
+            'terms_and_condition'=>'Default terms and conditions',
             'item'=>[
                 [
                    'product_id'=>null,

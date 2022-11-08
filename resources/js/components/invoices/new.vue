@@ -30,10 +30,11 @@ const addCart = async (item) => {
         id: item.id,
         item_code: item.item_code,
         description: item.description,
-        unite_price: item.unite_price,
+        unit_price: item.unit_price,
         quantity: item.quantity,
     };
     listCart.value.push(itemcart);
+    closeModal();
 };
 
 const openModal = () => {
@@ -46,7 +47,24 @@ const closeModal = () => {
 
 const getProduct = async () => {
     let response = await axios.get("/api/get_all_product");
-    console.log("rep", response.data);
+    //console.log("rep", response.data);
+    listProduct.value = response.data.products;
+};
+
+const removeItem = (i) => {
+    listCart.value.splice(i, 1);
+};
+
+const subTotal = () => {
+    let total = 0;
+    listCart.value.map((data) => {
+        total = total + data.quantity * data.unit_price;
+    });
+    return total;
+};
+
+const Total = () => {
+    return subTotal() - form.value.discount;
 };
 </script>
 <template>
@@ -147,10 +165,13 @@ const getProduct = async () => {
                             />
                         </p>
                         <p v-if="itemcart.quantity">
-                            $ {{ itemcart.quantity }}*{{ itemcart.unit_price }}
+                            $ {{ itemcart.quantity * itemcart.unit_price }}
                         </p>
                         <p v-else></p>
-                        <p style="color: red; font-size: 24px; cursor: pointer">
+                        <p
+                            style="color: red; font-size: 24px; cursor: pointer"
+                            @click="removeItem(i)"
+                        >
                             &times;
                         </p>
                     </div>
@@ -171,20 +192,25 @@ const getProduct = async () => {
                             cols="50"
                             rows="7"
                             class="textarea"
+                            v-model="form.terms_and_condition"
                         ></textarea>
                     </div>
                     <div>
                         <div class="table__footer--subtotal">
                             <p>Sub Total</p>
-                            <span>$ 1000</span>
+                            <span>$ {{ subTotal() }}</span>
                         </div>
                         <div class="table__footer--discount">
                             <p>Discount</p>
-                            <input type="text" class="input" />
+                            <input
+                                type="text"
+                                class="input"
+                                v-model="form.discount"
+                            />
                         </div>
                         <div class="table__footer--total">
                             <p>Grand Total</p>
-                            <span>$ 1200</span>
+                            <span>$ {{ Total() }}</span>
                         </div>
                     </div>
                 </div>
@@ -209,10 +235,21 @@ const getProduct = async () => {
                 <hr />
                 <br />
                 <div class="modal__items">
-                    <select class="input my-1">
-                        <option value="None">None</option>
-                        <option value="None">LBC Padala</option>
-                    </select>
+                    <ul style="list-style: none">
+                        <li
+                            class="list"
+                            v-for="(item, i) in listProduct"
+                            :key="item.id"
+                        >
+                            <p>{{ i + 1 }}</p>
+                            <a href="#"
+                                >{{ item.item_code }} {{ item.description }}</a
+                            >
+                            <button @click="addCart(item)" class="Ibutton">
+                                +
+                            </button>
+                        </li>
+                    </ul>
                 </div>
                 <br />
                 <hr />
@@ -232,4 +269,15 @@ const getProduct = async () => {
     </div>
 </template>
 
-<style></style>
+<style scoped>
+.list {
+    display: grid;
+    grid-template-columns: 30px 350px 15px;
+    align-items: center;
+}
+.Ibutton {
+    border: 1px solid rgb(231, 230, 233);
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+</style>
