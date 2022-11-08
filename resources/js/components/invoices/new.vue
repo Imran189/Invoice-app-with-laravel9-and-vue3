@@ -1,6 +1,9 @@
 <script setup>
 import { stringify } from "querystring";
 import { onMounted, ref } from "vue";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
 const form = ref([]);
 const allcustomer = ref([]);
 const customer_id = ref([]);
@@ -86,6 +89,10 @@ const onSave = async () => {
         formData.append("subtotal", form.value.subtotal);
         formData.append("total", form.value.total);
         formData.append("terms_and_condition", form.value.terms_and_condition);
+
+        axios.post("/api/add_invoice", formData);
+        listCart.value = [];
+        router.push("/");
     }
 };
 </script>
