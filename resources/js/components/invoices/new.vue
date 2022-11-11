@@ -88,7 +88,7 @@ const onSave = () => {
         formData.append("subtotal", subtotal);
         formData.append("total", total);
         formData.append("terms_and_condition", form.value.terms_and_condition);
-
+        console.log(formData);
         axios.post("/api/add_invoice", formData);
         listCart.value = [];
         router.push("/");

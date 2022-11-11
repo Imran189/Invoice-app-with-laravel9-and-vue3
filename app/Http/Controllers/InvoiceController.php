@@ -46,7 +46,7 @@ class InvoiceController extends Controller
             'number'=>$counter->prefix.$counters,
             'customer_id'=>null,
             'customer'=>null,
-            'date'=>date('Y-m-d'),
+            'date'=>null,
             'due_date'=>null,
             'reference'=>null,
             'discount'=>0,
